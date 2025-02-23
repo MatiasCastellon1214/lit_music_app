@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import user_router, book_router, book_genre_router
+from routers import user_router, book_router, book_genre_router, book_comment_router
 
 app = FastAPI(
     title="Literature Music App",
@@ -9,5 +9,6 @@ app = FastAPI(
 app.include_router(user_router.router)
 app.include_router(book_router.router)
 app.include_router(book_genre_router.router)
+app.include_router(book_comment_router.router)
 
 
