@@ -1,13 +1,13 @@
 from typing import List
 from bson import ObjectId
 from fastapi import APIRouter, status
-from models.BookCommentCreate import BookCommentCreate
+from models.book_comment.BookCommentCreate import BookCommentCreate
+from models.book_comment.BookCommentModel import BookComment
 from schema.BookCommentSchema import book_comment_schema, book_comments_schema
 from schema.BookGenreSchema import book_genre_schema
 from db.config.db import db_client
 from services.BookCommentService import search_book_comment, create_book_comment, update_book_comment, delete_book_comment, get_comment_for_book
 
-from models.BookCommentModel import BookComment
 
 router = APIRouter(prefix="/book_comments",
                     tags=["book_comments"],
@@ -49,7 +49,7 @@ async def delete_existing_book_comment(id: str):
     return delete_book_comment(id)
 
 
-# GET - Get comment by book
+# GET - Endpoint to get comments from a book
 @router.get("/book_comments/{book_id}/comments", tags=["book_comments"],
             response_model=List[BookComment])
 async def get_comments_for_book_endpoint(book_id: str):

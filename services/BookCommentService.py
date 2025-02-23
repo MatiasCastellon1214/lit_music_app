@@ -2,7 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 from fastapi import HTTPException, status
 from db.config.db import db_client
-from models.BookCommentModel import BookComment
+from models.book_comment.BookCommentModel import BookComment
 from schema.BookCommentSchema import book_comment_schema, book_comments_schema
 import logging
 
@@ -23,7 +23,7 @@ def validate_book_exists(book_id: str):
                 detail="Invalid book ID format"
             )
     
-        # Search book in databse
+        # Search for book in the databse
         logger.info(f"Searching for book with ID: {book_id}")
         book = db_client.books.find_one({"_id": ObjectId(book_id)})
 
@@ -74,7 +74,7 @@ def create_book_comment(book_comment: BookComment):
         # Convert comment to a dict
         book_comment_dict = book_comment.model_dump()
 
-        # Add creation date automatically
+        # Automatically add creation date
         book_comment_dict["created_at"] = datetime.now()
 
         # Insert book comment into database
@@ -109,6 +109,9 @@ def update_book_comment(comment_id: str, update_book_comment: BookComment):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND
         )
+    
+    # Verify if book id exists before create comment
+    validate_book_exists(update_book_comment.book_id)
     
     book_comment_dict = update_book_comment.model_dump(exclude={"created_at", "updated_at"})
 
