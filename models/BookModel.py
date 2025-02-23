@@ -7,6 +7,6 @@ class Book(BaseModel):
     id: Optional[str] = None
     title: str
     author: str
-    opinion: str
     genres: List[str] = []
+    
     

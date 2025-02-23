@@ -6,7 +6,6 @@ def book_schema(book) -> dict:
         "id": str(book["_id"]),
         "title": book["title"],
         "author": book["author"],
-        "opinion": book["opinion"],
         "genres": book.get("genres", [])
     }
 

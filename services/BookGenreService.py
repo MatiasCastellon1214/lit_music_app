@@ -1,8 +1,12 @@
 from bson import ObjectId
 from fastapi import HTTPException, status
 from db.config.db import db_client
+from models.BookCommentModel import BookComment
 from models.BookGenreModel import BookGenre
+from schema.BookCommentSchema import book_comment_schema
 from schema.BookGenreSchema import book_genre_schema
+
+
 
 
 
@@ -18,8 +22,10 @@ def search_book_genre(field:str, key):
         return {"error": "Book genre not found"}
     
 
+
 # Create book genre
 def create_book_genre(book_genre: BookGenre):
+
 
     if type(search_book_genre('name', book_genre.name)) == BookGenre:
         raise HTTPException(
