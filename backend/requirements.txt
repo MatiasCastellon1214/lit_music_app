@@ -7,3 +7,4 @@ cryptography
 passlib
 bcrypt
 python-jose
+nltk

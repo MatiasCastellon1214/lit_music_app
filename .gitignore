@@ -1,1 +1,15 @@
+# === Data ===
 machine_learning/data/Books_rating.csv
+
+
+# === Environment and config ===
+.env
+backend/.env
+
+# === Archivos y carpetas temporales ===
+*.pyc
+__pycache__/
+*.log
+*.DS_Store
+.ipynb_checkpoints/
+Readme.txt
