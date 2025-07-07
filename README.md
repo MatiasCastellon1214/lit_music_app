@@ -71,7 +71,7 @@ Accedé a la documentación Swagger:
 
 ## 📝 Notas
 
-- El archivo `Books_rating.csv` es muy pesado (~2.7 GB), por lo tanto **no está en el repositorio**. Si lo necesitas, descargalo desde [Kaggle](https://www.kaggle.com/) y ubicalo en `machine_learning/data/`.
+- El archivo `Books_rating.csv` es muy pesado (~2.7 GB), por lo tanto **no está en el repositorio**. Si lo necesitas, descargalo desde [Kaggle](https://www.kaggle.com/datasets/mohamedbakhet/amazon-books-reviews) y ubicalo en `machine_learning/data/`.
 - Las rutas de los modelos entrenados se encuentran en:`machine_learning/models/best_model.pkl``machine_learning/models/vectorizer.pkl`
 - Evitá la carpeta `machine_learning/machine_learning/models/`, puede eliminarse si está duplicada.
 
