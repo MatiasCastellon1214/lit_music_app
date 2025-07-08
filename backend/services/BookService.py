@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from bson import ObjectId
 from fastapi import HTTPException, status
-from db.config.db import db_client
+from db.config.db import db
 from models.book.BookModel import Book
 from schema.BookGenreSchema import book_genre_schema, book_genres_schema
 from schema.BookSchema import book_schema
@@ -31,7 +31,7 @@ def validate_genre_exist(genre_ids: List[str]):
 
             # Search for genre in the database
             logger.info(f"Searching for gender with ID: {genre_id}")
-            genre = db_client.book_genres.find_one({"_id": ObjectId(genre_id)})
+            genre = db.book_genres.find_one({"_id": ObjectId(genre_id)})
 
             if not genre:
                 logger.error(f"Genre with id {genre_id} not found")
@@ -54,7 +54,7 @@ def validate_genre_exist(genre_ids: List[str]):
 # Search Book
 def search_book(field: str, key):
     try:
-        book = db_client.books.find_one({field: key})
+        book = db.books.find_one({field: key})
 
         if not book:
             return {"error": "Book not found"}
@@ -87,9 +87,9 @@ def create_book(book: Book):
     # Automatically add the date of creation
     book_dict["created_at"] = datetime.now()
 
-    id = db_client.books.insert_one(book_dict).inserted_id
+    id = db.books.insert_one(book_dict).inserted_id
 
-    new_book = book_schema(db_client.books.find_one({'_id': id}))
+    new_book = book_schema(db.books.find_one({'_id': id}))
 
     return Book(**new_book)
 
@@ -107,7 +107,7 @@ def update_book(id: str, book: Book):
 
 
     # Check if the book exists before updating
-    existing_book = db_client.books.find_one({"_id": ObjectId(id)})
+    existing_book = db.books.find_one({"_id": ObjectId(id)})
     if not existing_book:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -125,7 +125,7 @@ def update_book(id: str, book: Book):
     
     try:
 
-        result = db_client.books.find_one_and_update(
+        result = db.books.find_one_and_update(
             {'_id': ObjectId(id)},
             {'$set': book_dict},
             return_document=True
@@ -157,7 +157,7 @@ def delete_book(id: str):
             detail='Invalid book Id'
         )
     
-    book_found = db_client.books.find_one({'_id': ObjectId(id)})
+    book_found = db.books.find_one({'_id': ObjectId(id)})
 
     if not book_found:
         raise HTTPException(
@@ -165,7 +165,7 @@ def delete_book(id: str):
             detail="Book not found"
         )
     
-    db_client.books.delete_one({'_id': ObjectId(id)})
+    db.books.delete_one({'_id': ObjectId(id)})
 
     return book_found
 

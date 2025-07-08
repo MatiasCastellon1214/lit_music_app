@@ -7,10 +7,25 @@ from pymongo import MongoClient
 
 try:
     # Local Database
-    db_client = MongoClient("mongodb://localhost:27017/").lit_music_app
+    client = MongoClient("mongodb://localhost:27017/")
+    db = client.lit_music_app
+
+    # Define cada colección explícitamente
+    books = db["books"]
+    comments = db["comments"]
+    image_books = db["image_books"]
+
     print("✅ Succeful connection to the local database")
 except Exception as e:
     print(f"❌ Connection error: {e}")
+
+"""
+# Remote Database
+#db_client = MongoClient(
+#   'mongodb+srv://test:test@cluster0.q9a4d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').test
+"""
+
+
 
 '''
 
@@ -51,4 +66,5 @@ try:
     conn = engine.connect()
     print("✅ Succeful connection to the remote database")
 except Exception as e:
-    print(f"❌ Connection error: {e}")'''
+    print(f"❌ Connection error: {e}")
+'''
