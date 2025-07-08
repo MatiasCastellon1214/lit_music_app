@@ -3,7 +3,7 @@ from typing import List
 from models.UserModel import User
 from schema.UserSchema import users_schema
 from services.UserService import search_user, create_user, update_user, delete_user
-from db.config.db import db_client
+from db.config.db import db
 from bson import ObjectId
 
 
@@ -16,7 +16,7 @@ router = APIRouter(prefix="/users",
 @router.get("/", tags=["users"], 
             response_model=List[User])
 async def get_users():
-    return users_schema(db_client.users.find())
+    return users_schema(db.users.find())
 
 
 # GET - Calling a user by id - Path

@@ -1,7 +1,7 @@
 from datetime import datetime
 from bson import ObjectId
 from fastapi import HTTPException, status
-from db.config.db import db_client
+from db.config.db import db
 from models.book_genre.BookGenreModel import BookGenre
 from schema.BookGenreSchema import book_genre_schema
 import logging
@@ -20,7 +20,7 @@ def search_book_genre(field:str, key):
 
     try:
 
-        book_genre = db_client.book_genres.find_one({field: key})
+        book_genre = db.book_genres.find_one({field: key})
         
         if not book_genre:
             return None
@@ -50,9 +50,9 @@ def create_book_genre(book_genre: BookGenre):
 
         book_genre_dict["created_at"] = datetime.now()
         
-        id = db_client.book_genres.insert_one(book_genre_dict).inserted_id
+        id = db.book_genres.insert_one(book_genre_dict).inserted_id
 
-        new_book_genre = book_genre_schema(db_client.book_genres.find_one({"_id": id}))
+        new_book_genre = book_genre_schema(db.book_genres.find_one({"_id": id}))
 
         return BookGenre(**new_book_genre)
 
@@ -77,7 +77,7 @@ def update_book_genre(id: str, book_genre: BookGenre):
         )
     
     # Check if the book genre exists before updating
-    existing_book_genre = db_client.book_genres.find_one({"_id": ObjectId(id)})
+    existing_book_genre = db.book_genres.find_one({"_id": ObjectId(id)})
     if not existing_book_genre:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -91,7 +91,7 @@ def update_book_genre(id: str, book_genre: BookGenre):
 
     try:
 
-        result = db_client.book_genres.find_one_and_update(
+        result = db.book_genres.find_one_and_update(
             {"_id": ObjectId(id)},
             {"$set": book_genre_dict},
             return_document=True
@@ -122,7 +122,7 @@ def delete_book_genre(id: str):
             detail='Invalid book genre Id'
         )
     
-    book_genre_found = db_client.book_genres.find_one({"_id": ObjectId(id)})
+    book_genre_found = db.book_genres.find_one({"_id": ObjectId(id)})
 
     if not book_genre_found:
         raise HTTPException(
@@ -130,7 +130,7 @@ def delete_book_genre(id: str):
             detail="Book genre not found"
         )
 
-    db_client.book_genres.delete_one({"_id": ObjectId(id)})
+    db.book_genres.delete_one({"_id": ObjectId(id)})
 
     return book_genre_found
 
@@ -145,13 +145,13 @@ def get_books_by_genre(genre_id: str):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid genre ID"
             )
-        genre = db_client.book_genres.find_one({"_id": ObjectId(genre_id)})
+        genre = db.book_genres.find_one({"_id": ObjectId(genre_id)})
         if not genre:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Genre not found"
             )
-        books = db_client.books.find({"genres_id": ObjectId(genre_id)})
+        books = db.books.find({"genres_id": ObjectId(genre_id)})
         if not books:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

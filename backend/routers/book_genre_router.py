@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, status
 from bson import ObjectId
-from db.config.db import db_client
+from db.config.db import db
 from models.book.BookModel import Book
 from models.book_genre.BookGenreCreate import BookGenreCreate
 from models.book_genre.BookGenreModel import BookGenre
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/book_genres",
 @router.get("/", tags=["book_genres"],
            response_model=List[BookGenre])
 async def get_book_genre():
-    return book_genres_schema(db_client.book_genres.find())
+    return book_genres_schema(db.book_genres.find())
 
 
 # GET - Calling a book genre by id - Path

@@ -1,6 +1,6 @@
 from bson import ObjectId
 from fastapi import HTTPException, status
-from db.config.db import db_client
+from db.config.db import db
 from schema.UserSchema import user_schema
 from models.UserModel import User
 from utils.encryption import encrypt_password, f
@@ -10,7 +10,7 @@ from utils.encryption import encrypt_password, f
 def search_user(field: str, key):
     '''Search for an user by a given field (e.g. "email")'''
     try:
-        user = db_client.users.find_one({field: key})
+        user = db.users.find_one({field: key})
         print(user)
         return User(**user_schema(user))
     except:
@@ -30,9 +30,9 @@ def create_user(user: User):
     user_dict['password'] = f.encrypt(user.password.encode('utf-8')).decode('utf-8')
     user_dict.pop('id', None)
 
-    id = db_client.users.insert_one(user_dict).inserted_id
+    id = db.users.insert_one(user_dict).inserted_id
 
-    new_user = user_schema(db_client.users.find_one({'_id': id}))
+    new_user = user_schema(db.users.find_one({'_id': id}))
 
     return User(**new_user)
 
@@ -48,7 +48,7 @@ def update_user(id: str, user: User):
         )
     
     # Check if the user exists before updating
-    existing_user = db_client.users.find_one({"_id": ObjectId(id)})
+    existing_user = db.users.find_one({"_id": ObjectId(id)})
     if not existing_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -62,7 +62,7 @@ def update_user(id: str, user: User):
 
     try:
 
-        result =db_client.users.find_one_and_update(
+        result =db.users.find_one_and_update(
             {'_id': ObjectId(id)},
             {'$set': user_dict},
             return_document=True)
@@ -92,7 +92,7 @@ def delete_user(id: str):
             detail='Invalid user Id'
         )
 
-    user_found = db_client.users.find_one({'_id': ObjectId(id)})
+    user_found = db.users.find_one({'_id': ObjectId(id)})
 
     if not user_found:
         raise HTTPException(
@@ -101,6 +101,6 @@ def delete_user(id: str):
         )
     
     # Delete User after obtaining it
-    db_client.users.delete_one({'_id': ObjectId(id)})
+    db.users.delete_one({'_id': ObjectId(id)})
 
     return user_found

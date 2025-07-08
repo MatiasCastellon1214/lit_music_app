@@ -5,7 +5,7 @@ from models.book_comment.BookCommentCreate import BookCommentCreate
 from models.book_comment.BookCommentModel import BookComment
 from schema.BookCommentSchema import book_comment_schema, book_comments_schema
 from schema.BookGenreSchema import book_genre_schema
-from db.config.db import db_client
+from db.config.db import db
 from services.BookCommentService import search_book_comment, create_book_comment, update_book_comment, delete_book_comment, get_comment_for_book
 
 
@@ -18,7 +18,7 @@ router = APIRouter(prefix="/book_comments",
 @router.get("/", tags=["book_comments"],
              response_model= List[BookComment])
 async def get_book_comments():
-    return book_comments_schema(db_client.book_comments.find())
+    return book_comments_schema(db.book_comments.find())
 
 
 # GET - Calling a book comment by id - Path

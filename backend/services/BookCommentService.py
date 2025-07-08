@@ -1,7 +1,7 @@
 from datetime import datetime
 from bson import ObjectId
 from fastapi import HTTPException, status
-from db.config.db import db_client
+from db.config.db import db
 #from machine_learning.scripts.inference import predict_sentiment
 from models.book_comment.BookCommentModel import BookComment
 from schema.BookCommentSchema import book_comment_schema, book_comments_schema
@@ -33,7 +33,7 @@ def validate_book_exists(book_id: str):
     
         # Search for book in the databse
         logger.info(f"Searching for book with ID: {book_id}")
-        book = db_client.books.find_one({"_id": ObjectId(book_id)})
+        book = db.books.find_one({"_id": ObjectId(book_id)})
 
         if not book:
             logger.error(f"Book with ID {book_id} not found")
@@ -56,7 +56,7 @@ def validate_book_exists(book_id: str):
     
 def search_book_comment(field: str, key):
     try:
-        book_comment = db_client.book_comments.find_one({field: key})
+        book_comment = db.book_comments.find_one({field: key})
 
         if not book_comment:
             raise HTTPException(
@@ -90,10 +90,10 @@ def create_book_comment(book_comment: BookComment):
         book_comment_dict["created_at"] = datetime.now()
 
         # Insert book comment into database
-        id = db_client.book_comments.insert_one(book_comment_dict).inserted_id
+        id = db.book_comments.insert_one(book_comment_dict).inserted_id
 
         # Obtain comment recentrly created
-        new_book_comment = book_comment_schema(db_client.book_comments.find_one({"_id": id}))
+        new_book_comment = book_comment_schema(db.book_comments.find_one({"_id": id}))
 
         return BookComment(**new_book_comment)
     
@@ -115,7 +115,7 @@ def update_book_comment(comment_id: str, update_book_comment: BookComment):
             detail="Book comment not found"
         )
     
-    existing_book_comment = db_client.book_comments.find_one({"_id": ObjectId(comment_id)}) 
+    existing_book_comment = db.book_comments.find_one({"_id": ObjectId(comment_id)}) 
 
     if not existing_book_comment:
         raise HTTPException(
@@ -130,7 +130,7 @@ def update_book_comment(comment_id: str, update_book_comment: BookComment):
     book_comment_dict["updated_at"] = datetime.now()
 
     try:
-        result = db_client.book_comments.find_one_and_update(
+        result = db.book_comments.find_one_and_update(
             {"_id": ObjectId(comment_id)},
             {"$set": book_comment_dict},
             return_document=True
@@ -163,7 +163,7 @@ def delete_book_comment(id: str):
         )
     
 
-    book_comment_found = db_client.book_comments.find_one({"_id": ObjectId(id)})
+    book_comment_found = db.book_comments.find_one({"_id": ObjectId(id)})
 
     if not book_comment_found:
         logger.error(f"Book comment with id={id} not found")
@@ -173,7 +173,7 @@ def delete_book_comment(id: str):
         )
        
             
-    db_client.book_comments.delete_one({"_id": ObjectId(id)})
+    db.book_comments.delete_one({"_id": ObjectId(id)})
 
     return book_comment_found
         
@@ -181,7 +181,7 @@ def delete_book_comment(id: str):
 def get_comment_for_book(book_id: str):
 
     try:
-        comments = db_client.book_comments.find({"book_id": book_id})
+        comments = db.book_comments.find({"book_id": book_id})
         return book_comments_schema(comments)
     except Exception as e:
         logger.error(f"Error getting comments for book: {e}")
