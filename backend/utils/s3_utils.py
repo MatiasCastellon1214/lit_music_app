@@ -1,11 +1,3 @@
-# Establecemos las variables de entorno para conectarnos con AWS S3 fastapi-book-images
-# conda env config vars set AWS_ACCESS_KEY_ID="tu_access_key_id"
-# conda env config vars set AWS_SECRET_ACCESS_KEY="tu_secret_access_key"
-# conda env config vars set AWS_S3_BUCKET="fastapi-book-images"
-# Luego desactivar y volver a activar el entorno para que los cambios surtan efecto.
-
-# Instalamos Boto3
-# pip install boto3
 
 import os
 import boto3

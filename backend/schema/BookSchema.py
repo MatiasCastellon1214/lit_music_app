@@ -17,6 +17,7 @@ def book_schema(book) -> dict:
         "genres_id": [str(genre_id) for genre_id in book["genres_id"]],
         "sentiment": book.get("sentiment"),
         "image": images,
+        "comment_id": [str(comment_id) for comment_id in book.get("comment_id", [])],
         "created_at": book.get("created_at"),
         "updated_at": book.get("updated_at")
     }

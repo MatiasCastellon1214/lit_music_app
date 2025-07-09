@@ -12,11 +12,11 @@ def test_book_create_validation():
         assert errs[0]["type"] == "too_short"
         assert errs[0]["loc"] == ("genres_id",)
 
-def test_genre_create_validation_missing_name():
+def test_genre_create_validation_missing_description():
     try:
-        BookGenreCreate(description="Fantasy books")
+        BookGenreCreate(name="Fantasy books")
     except ValidationError as e:
         errs = e.errors()
-        assert errs[0]["loc"] == ("name",)
+        assert errs[0]["loc"] == ("description",)
 
 
