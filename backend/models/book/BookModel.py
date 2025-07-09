@@ -10,6 +10,7 @@ class Book(BaseModel):
     author: str
     genres_id: List[str] = Field(..., min_length=1, description="Id must belong to a valid genre")
     image: Optional[List[str]] = []
+    comment_id: Optional[List[str]] = []
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     

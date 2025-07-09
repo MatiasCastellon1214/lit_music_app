@@ -92,6 +92,14 @@ def create_book_comment(book_comment: BookComment):
         # Insert book comment into database
         id = db.book_comments.insert_one(book_comment_dict).inserted_id
 
+        logger.info(f"Inserted comment ID: {id}")
+
+        # Update the corresponding book to include this comment ID
+        db.books.update_one(
+            {"_id": ObjectId(book_comment.book_id)},
+            {"$push": {"comment_id": id}}
+        )
+
         # Obtain comment recentrly created
         new_book_comment = book_comment_schema(db.book_comments.find_one({"_id": id}))
 
@@ -172,7 +180,13 @@ def delete_book_comment(id: str):
         detail="Book comment not found"
         )
        
-            
+    # Remove the comment ID from the book's comment_id list
+    db.books.update_one(
+        {"_id": ObjectId(book_comment_found["book_id"])},
+        {"$pull": {"comment_id": ObjectId(id)}}
+    )
+    
+    # Delete the comment        
     db.book_comments.delete_one({"_id": ObjectId(id)})
 
     return book_comment_found
