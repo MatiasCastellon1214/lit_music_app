@@ -1,24 +1,27 @@
-# Módulo conexión MongoDB: pip install pymongo
-# Ejecución: sudo mongod --dbpath "/path/a/la/base/de/datos/"
-# mongod --dbpath "C:\Users\Mirty\Documents\lit_music_app\db"
-# Conexión: mongodb://localhost
 
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv
+load_dotenv(".env.test")
+
 
 try:
-    # Local Database
     client = MongoClient("mongodb://localhost:27017/")
-    db = client.lit_music_app
 
-    # Define cada colección explícitamente
+    if os.getenv("MONGO_DB_TEST") == "true":
+        db = client.lit_music_app_test  # <--- Base de test
+        print("✅ Connected to TEST database!")
+    else:
+        db = client.lit_music_app  # <--- Base normal
+        print("✅ Connected to LOCAL database!")
+
     books = db["books"]
     comments = db["comments"]
     image_books = db["image_books"]
+    book_genres = db["book_genres"]
 
-    print("✅ Succeful connection to the local database")
 except Exception as e:
     print(f"❌ Connection error: {e}")
-
 """
 # Remote Database
 #db_client = MongoClient(

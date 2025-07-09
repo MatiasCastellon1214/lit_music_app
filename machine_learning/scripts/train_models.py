@@ -27,7 +27,7 @@ dataset["clean_summary"] = dataset["clean_summary"].astype(str)
 # Reset indexes to avoid KeyError
 dataset = dataset.reset_index(drop=True)
 
-corpus = prepare_corpus(dataset, "clean_summary", limit=1000)
+corpus = prepare_corpus(dataset, "clean_summary")
 labels = dataset["label"].values[:len(corpus)]  # Asegura alineación
 
 # Vectorize (sparse input)

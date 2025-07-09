@@ -19,8 +19,10 @@ model = joblib.load(MODEL_PATH)
 vectorizer = joblib.load(VECTORIZER_PATH)
 
 def predict_sentiment(text: str) -> str:
+    print("[DEBUG] Ejecutando predict_sentiment actualizado")
     cleaned = clean_text(text)
     X = vectorizer.transform([cleaned])
-    #X_dense = X.toarray()  # Conversión necesaria
-    prediction = model.predict(X)[0]
+    X_dense = X.toarray()
+    prediction = model.predict(X_dense)[0]
+    print("[DEBUG] Ejecutando predict_sentiment actualizado")
     return "positive" if prediction == 1 else "negative"

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, UploadFile, File
+from fastapi.params import Form
 from db.config import db
 from models.image_book.ImageBookModel import ImageBook
 from schema.ImageBookSchema import image_book_schema, image_books_schema
@@ -41,9 +42,11 @@ async def image_book(id: str):
 '''
 
 # POST
-@router.post("/", response_model= ImageBook, status_code= status.HTTP_201_CREATED)
+@router.post("/", 
+             response_model= ImageBook, 
+             status_code= status.HTTP_201_CREATED)
 async def create_image_book(file: UploadFile = File(...),
-                                book_id: str = None):
+                                book_id: str = Form(...)):
     if not book_id:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST, 
