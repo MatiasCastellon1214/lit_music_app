@@ -32,7 +32,8 @@ async def book(id: str):
 
 # POST 
 @router.post('/', tags=['books'],
-             response_model=Book)
+             response_model=Book,
+             status_code=status.HTTP_201_CREATED)
 async def create_new_book(book: BookCreate):
     return create_book(book)
 
