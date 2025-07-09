@@ -1,4 +1,4 @@
-from inference import predict_sentiment
+from machine_learning.scripts.inference import predict_sentiment
 
 def test_predict_sentiment():
     test_texts = [
