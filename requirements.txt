@@ -1,0 +1,30 @@
+# Core FastAPI + Mongo
+fastapi
+pymongo
+pydantic
+uvicorn
+
+# Seguridad y JWT
+python-dotenv
+cryptography
+passlib
+bcrypt
+python-jose
+
+# NLP
+nltk
+
+# AWS S3
+boto3
+
+# ML y data science
+joblib
+scikit-learn
+matplotlib
+seaborn
+pandas
+numpy
+
+# Testing
+pytest
+httpx  # opcional, si tu TestClient lo requiere

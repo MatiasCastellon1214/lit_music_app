@@ -1,83 +1,79 @@
-# 📚 Lit Music App
+# Lit Music App
 
-Aplicación que combina análisis de sentimientos con reseñas de libros, utilizando Machine Learning, FastAPI y MongoDB.
+## Descripción
 
----
+Lit Music App es una aplicación que combina música y literatura, permitiendo a los usuarios descubrir libros y canciones relacionadas.
 
-## 🧠 Requisitos
+## Requisitos
 
-Asegurate de tener instalados:
+- Python 3.12 o superior
+- MongoDB
+- Git
 
-- Python 3.12
-- MongoDB (instalado localmente y accesible mediante `mongod`)
-- Git + Git LFS
-- Entorno virtual configurado (`venv`, `conda`, etc.)
+## Instalación
 
-Instala las dependencias ejecutando:
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/MatiasCastellon1214/lit_music_app.git
+   ```
+2. Instala las dependencias del backend:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-pip install -r requirements.txt
-```
 
-> 📦 Si usás `nltk`, asegurate de ejecutar también:
+## Ejecución
 
-```python
-import nltk
-nltk.download('punkt')
-```
-
----
-
-## 📁 Estructura del proyecto
-
-```
-lit_music_app/
-│
-├── backend/                  # API REST con FastAPI
-│   ├── main.py               # Punto de entrada del servidor
-│   └── ...                   # Routers, servicios, modelos, etc.
-│
-├── machine_learning/
-│   ├── data/                 # Datasets (uno pesado está en .gitignore)
-│   ├── models/               # Modelos finales entrenados (vectorizer + modelo)
-│   ├── scripts/              # Scripts para entrenamiento e inferencia
-│   └── notebooks/            # Exploración y análisis
-│
-├── requirements.txt
-├── run_all.sh               # Script para ejecutar todo
-└── README.md
-```
-
----
-
-## 🚀 ¿Cómo ejecutar el proyecto?
-
-Desde la raíz del proyecto, simplemente ejecutá:
+Para iniciar la aplicación, ejecuta el siguiente script:
 
 ```bash
-bash run_all.sh
+./run_all.sh
 ```
 
-Este script:
+Este script se encargará de:
 
-1. Inicia MongoDB (`mongod`)
-2. Entrena el modelo (si es necesario)
-3. Levanta el backend con FastAPI
+1. Iniciar MongoDB.
+2. Entrenar el modelo de Machine Learning.
+3. Iniciar el backend de FastAPI con Uvicorn.
 
-Accedé a la documentación Swagger:
-👉 [http://localhost:8000/docs](http://localhost:8000/docs)
+Una vez iniciado, podrás acceder a la API en `http://127.0.0.1:8000`.
 
----
 
-## 📝 Notas
 
-- El archivo `Books_rating.csv` es muy pesado (~2.7 GB), por lo tanto **no está en el repositorio**. Si lo necesitas, descargalo desde [Kaggle](https://www.kaggle.com/datasets/mohamedbakhet/amazon-books-reviews) y ubicalo en `machine_learning/data/`.
-- Las rutas de los modelos entrenados se encuentran en:`machine_learning/models/best_model.pkl``machine_learning/models/vectorizer.pkl`
-- Evitá la carpeta `machine_learning/machine_learning/models/`, puede eliminarse si está duplicada.
+También puedes hacer correr manualmente en caso de no querer hacer correr el modelo de machine learning:
 
----
+```bash
+cd backend/
+```
 
-## 👨‍💻 Autor
+```bash
+uvicorn main:app --reload
+```
 
-Matías Castellón
-Proyecto desarrollado como parte de la formación en programación y análisis de datos.
+### Entrenar el modelo de Machine Learning
+
+Desde root:
+
+```bash
+cd machine_learning/scripts/
+
+python -m train_models
+```
+
+### Tests
+
+Desde root:
+
+```bash
+cd backend/tests/
+```
+
+Por ejemplo, para hacer correr la prueba unitaria:
+
+```bash
+pytest -v unit/test_models.py 
+```
+
+### Docs
+
+En la carpeta **docs**, ubicada en root, se encuentra documentación de funcionamiento.
