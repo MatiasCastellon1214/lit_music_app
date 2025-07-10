@@ -4,6 +4,7 @@ machine_learning/data/Books_rating.csv
 
 # === Environment and config ===
 .env
+.env.test
 backend/.env
 
 # === Archivos y carpetas temporales ===
